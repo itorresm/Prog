@@ -11,11 +11,15 @@ int main(void)
   std::cout << "el producto es:\n" << val1*val2 << std::endl;
   if (val1 > val2)
     {
-      std::cout << "El mayor es: " << val1 << std::endl;
+      std::cout << "El mayor es:\n " << val1 << std::endl;
+    }
+  if (val1 < val2)
+    {
+      std::cout << "El menor es:\n " << val1 << std::endl;
     }
   else
     {
-      std::cout << "El menor es:\n " << val1 << std::endl;
+      std::cout << "son iguales :)" << std::endl;
     }
   return 0;
 }
