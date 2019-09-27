@@ -1,25 +1,15 @@
 #include <iostream>
+#include <cmath>
 
 int primo(int a);
+int num_primos(int m);
 void print_primos(int m, int n);
-int print (int i, int j);
 
 int main(void)
 {
   print_primos(1,100);
   return 0;
 }
-
-
-int print (int i, int j)
-{
-  for (int ii = i; ii <= j; ii++)
-    {
-      std::cout << ii << std::endl;
-    }
-  
-}
-
 
 int primo(int a)
 {
@@ -41,19 +31,24 @@ int primo(int a)
   return result;
 }
 
+int num_primos(int m)
+{
+	int sum = 0;
+	for(int ii = 1; ii <=m; ++ii)
+	{
+		if (primo(ii) == 1)
+		{
+			sum += 1;
+		}		
+	}
+	return sum;
+}
+
 void print_primos(int m, int n)
 {
   int sum = -1;
   for (int ii = m; ii <= n; ii++)
-    {
-      std::cout << ii << std::endl;
-      if (primo(ii) == 1)
-	{
-	  sum += 1;
-	  std::cout << "   " << ii << "   " << sum  << std::endl;
-	}
-      
-    }
+  {
+		std::cout << ii << "  " << num_primos(ii) << "  " << ii/(log(ii)-1.08366) << std::endl;
+  }     
 }
-
-
