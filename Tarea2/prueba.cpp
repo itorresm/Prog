@@ -3,14 +3,28 @@
 
 using fptr = double(double);
 double fun(double x);
-double bisection(double xl, double xu, double eps, fptr f);
-double regulafalsi(double xl, double xu, double eps, fptr f);
-double newton_raphson(double x0, double eps, fptr f, fptr fdev);
+int bisection(double xl, double xu, double eps, fptr f);
+int regulafalsi(double xl, double xu, double eps, fptr f);
+int newton_raphson(double x0, double eps, fptr f, fptr fdev);
 double fdev(double x);
+
 
 int main(void)
 {
+  double xl = 1.0, xu = 2.0, x0 = 0.1;
   std::cout.precision(16), std::cout.setf(std::ios::scientific);
+  std::cout << "#EPS-DELTA" << "              "
+	    << "Nbisect" << "\t  "
+	    << "NFalsePos" << "   "
+	    << "NNewton" << "\t" << "\n";
+  for (int n = 1; n <= 9; ++n)
+    {
+    double EPS  = std::pow(10, -n);
+    std::cout << EPS << "\t"
+	      << bisection(xl, xu, EPS, fun) << "\t  "
+	      << regulafalsi(xl, xu, EPS, fun) << "\t      "
+	      << newton_raphson(x0, EPS, fun, fdev) << "\n";
+    }
   return 0;
 }
 
@@ -24,19 +38,18 @@ double fdev(double x)
   return (-3*std::pow(M_E, -x))-1;
 }
   
-double bisection(double xl, double xu, double eps, fptr f)
+int bisection(double xl, double xu, double eps, fptr f)
 {
   double xr = xl;
   int N = 0;
   while(1)
     {
       xr = (xl+xu)/2;
-      N++;
-      if (f(xr) <= eps)
+      if (std::fabs(f(xr)) <= eps)
 	{
 	  break;
 	}
-      else if (f(xl)*f(xr) < 0) 
+      else if (f(xr)*f(xl) < 0) 
 	{
 	  xu = xr;
 	}
@@ -44,24 +57,24 @@ double bisection(double xl, double xu, double eps, fptr f)
 	{
 	  xl = xr;
 	}
+      N++;
     }
-  std::cout << "#bisection iter = " << N << std::endl;
-  return xr;
+  //std::cout << "#bisection iter = " << N << std::endl;
+  return N;
 }
 
-double regulafalsi(double xl, double xu, double eps, fptr f)
+int regulafalsi(double xl, double xu, double eps, fptr f)
 {
   double xr = xl;
   int N = 0;
   while(1)
     {
       xr = xu - (f(xu)*(xl-xu))/(f(xl)-f(xu));
-      N++;
-      if (f(xr) <= eps)
+      if (std::fabs(f(xr)) <= eps)
 	{
 	  break;
 	}
-      else if (f(xl)*f(xr) < 0) 
+      else if (f(xr)*f(xl) < 0) 
 	{
 	  xu = xr;
 	}
@@ -69,18 +82,18 @@ double regulafalsi(double xl, double xu, double eps, fptr f)
 	{
 	  xl = xr;
 	}
+      N++;
     }
-  std::cout << "#regula-falsi iter = "<< N << std::endl;
-  return xr;
+  // std::cout << "#regula-falsi iter = "<< N << std::endl;
+  return N;
 }
 
-double newton_raphson(double x0, double eps, fptr f, fptr fdev)
+int newton_raphson(double x0, double eps, fptr f, fptr fdev)
 {
   double xr = x0;
   int N = 0;
   while(1)
     {
-      N++;
       if (f(xr) <= eps)
 	{
 	  break;
@@ -89,7 +102,8 @@ double newton_raphson(double x0, double eps, fptr f, fptr fdev)
 	{
 	  xr = xr - (f(xr))/(fdev(xr));
 	}
+      N++;
     }
-  std::cout << "#Newton_Raphson iter = " << N << std::endl;
-  return xr;
+  //std::cout << "#Newton_Raphson iter = " << N << std::endl;
+  return N;
 }
