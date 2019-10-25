@@ -1,4 +1,4 @@
-#include <iostream>
+#include <fstream>
 #include <cmath>
 
 using fptr = double(double);
@@ -11,20 +11,22 @@ double fdev(double x);
 
 int main(void)
 {
+  std::ofstream fout("1.txt");
   double xl = 0.1, xu = 2.0, x0 = 0.1;
-  std::cout.precision(15), std::cout.setf(std::ios::scientific);
-  std::cout << "#EPS-DELTA" << "              "
+  fout.precision(15), fout.setf(std::ios::scientific);
+  fout << "#EPS-DELTA" << "              "
 	    << "Nbisect" << "\t  "
 	    << "NFalsePos" << "   "
 	    << "NNewton" << "\t" << "\n";
   for (int n = 1; n <= 9; ++n)
     {
     double EPS  = std::pow(10, -n);
-    std::cout << EPS << "\t"
+    fout << EPS << "\t"
 	      << bisection(xl, xu, EPS, fun) << "\t  "
 	      << regulafalsi(xl, xu, EPS, fun) << "\t      "
 	      << newton_raphson(x0, EPS, fun, fdev) << "\n";
     }
+  fout.close();
   return 0;
 }
 
