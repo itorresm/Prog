@@ -43,21 +43,22 @@ double f(int idx, double t, const std::vector<double> & y)
   else
     {
       std::cerr << "Index Error: " << idx << std::endl;
-      return 0;
+      exit(1);
     }
       
 }
 
 void euler(std::vector<double> & data, double t, double h)
 {
-  const int N = TF/h;
-  std::vector<double> datatmp = data;
-  for(int nt = 0; nt < N; ++nt)
+  const int N = t/h;
+  std::vector<double> yaux(y.size());
+  for (int nt = 0; nt < N; ++nt)
     {
-      double T = h*nt;
-      for(int ii = 0; ii < int(data.size()); ++ii)
+      double t = 0.0 + h*nt;
+      std::copy(y.begin(), y.end(), yaux.begin());
+      for(int id = 0; id < int(y.size()); ++id)
 	{
-	  data[ii] = datatmp[ii] + h*f(ii, T, datatmp);
+	  y[id] = y[id] + h*f(id, t, yaux); // euler
 	}
     }
 }
@@ -128,9 +129,11 @@ void print_data(std::vector<double> & h, std::vector<double> & y)
       fout << h[ii] << " "; 
       euler(y, TF, h[ii]);
       fout << std::fabs(y[0]-x(TF)) << " ";
+      y = {X0, V0};
       rk4(y, TF, h[ii]);
       fout << std::fabs(y[0]-x(TF));
       fout << "\n";
+      y = {X0, V0};
     }
   fout.close();
 }
