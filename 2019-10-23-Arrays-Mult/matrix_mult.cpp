@@ -51,7 +51,7 @@ void print (const std::vector<int> & C, int m, int n)
 void matrix_mult(const std::vector<int> & A, const std::vector<int> & B,
 		 std::vector<int> & C, int m, int n)
 {
-  int sum = 0;
+  double sum = 0;
   for (int kk = 0; kk < m ; ++kk)
     {
       for (int ii = 0; ii < m; ++ii)
